@@ -1,60 +1,200 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Photobooth — FaaStore (Pink Glam Sparkle)</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Photobooth — FaaStore</title>
+
+<style>
+/* =======================
+   PINK GLAM SPARKLE THEME
+   ======================= */
+
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: "Poppins", sans-serif;
+  background: radial-gradient(circle at top, #2a0038, #120016, #000);
+  color: white;
+  text-align: center;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 0 25px rgba(255, 100, 255, 0.2);
+  backdrop-filter: blur(8px);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+h2 {
+  margin-top: 25px;
+  text-align: left;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 600;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.btn-pink {
+  background: linear-gradient(90deg, #ff77c0, #ff3fa0);
+  color: white;
+}
+
+.btn-dark {
+  background: rgba(255,255,255,0.08);
+  color: white;
+}
+
+#camera-container {
+  position: relative;
+  margin-top: 20px;
+}
+
+#camera {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  background: #000;
+  object-fit: cover;
+}
+
+#overlayCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  border-radius: 16px;
+}
+
+/* Gaya teks kecil */
+.small {
+  opacity: 0.7;
+  font-size: 13px;
+  margin-top: 10px;
+}
+</style>
 </head>
+
 <body>
-  <main class="wrap">
-    <header>
-      <h1>📸 Photobooth — FaaStore</h1>
-      <p class="tag">Pink Glam Sparkle • Pilih frame & custom upload</p>
-    </header>
 
-    <section class="camera-area">
-      <div class="video-wrap">
-        <video id="video" autoplay playsinline></video>
-        <canvas id="canvas" class="hidden"></canvas>
-        <img id="previewFrame" class="overlay hidden" alt="frame preview" />
-      </div>
+<div class="card">
+  <h1>📸 Photobooth — FaaStore</h1>
+  <div>Pink Glam Sparkle • Pilih frame & custom upload</div>
 
-      <div class="controls">
-        <button id="snapBtn" class="btn primary">Ambil Foto</button>
-        <button id="switchBtn" class="btn">Ganti Kamera</button>
-        <label class="btn upload">
-          Upload Frame PNG
-          <input id="uploadFrame" type="file" accept="image/png" />
-        </label>
-        <label class="toggle">
-          <input type="checkbox" id="qrToggle" />
-          <span>QR Download</span>
-        </label>
-        <label class="toggle">
-          <input type="checkbox" id="beautyToggle" checked />
-          <span>Soft-beauty</span>
-        </label>
-      </div>
-    </section>
+  <div id="camera-container">
+    <video id="camera" autoplay playsinline></video>
+    <canvas id="overlayCanvas"></canvas>
+  </div>
 
-    <section class="frames">
-      <h2>Pilih Frame</h2>
-      <div id="frameList" class="frame-list"></div>
-    </section>
+  <button class="btn-pink" onclick="takePhoto()">Ambil Foto</button>
+  <button class="btn-dark" onclick="switchCamera()">Ganti Kamera</button>
 
-    <section class="result hidden" id="resultSection">
-      <h2>Hasil</h2>
-      <img id="resultImg" alt="hasil foto" />
-      <a id="download" download="faastore_photo.png" class="btn download">Download Foto</a>
-      <a id="qrLink" class="btn" target="_blank" rel="noopener">Buka QR (opsional)</a>
-    </section>
+  <br><br>
+  <input type="file" id="frameUpload" accept="image/png" onchange="uploadFrame(event)">
+  <label><input type="checkbox" id="beautyToggle" checked onchange="toggleBeauty()"> Soft-beauty</label>
+</div>
 
-    <footer>
-      <small>Made with ❤️ for FaaStore — Pink Glam Sparkle</small>
-    </footer>
-  </main>
+<br><br>
+<div class="small">Made with ❤️ for FaaStore — Pink Glam Sparkle</div>
 
-  <script src="script.js"></script>
+<script>
+/* =======================
+   JAVASCRIPT — FIX CAMERA
+   ======================= */
+
+let stream = null;
+let useFrontCamera = true;
+
+const video = document.getElementById("camera");
+const overlayCanvas = document.getElementById("overlayCanvas");
+const ctx = overlayCanvas.getContext("2d");
+
+/* Start kamera */
+async function startCamera() {
+  if (stream) {
+    stream.getTracks().forEach(t => t.stop());
+  }
+
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: useFrontCamera ? "user" : "environment" },
+      audio: false
+    });
+
+    video.srcObject = stream;
+    await video.play();
+
+    overlayCanvas.width = video.videoWidth;
+    overlayCanvas.height = video.videoHeight;
+  } catch (err) {
+    alert("Gagal membuka kamera. Cek izin browser.");
+    console.error(err);
+  }
+}
+
+startCamera();
+
+/* Switch camera */
+function switchCamera() {
+  useFrontCamera = !useFrontCamera;
+  startCamera();
+}
+
+/* Beauty mode */
+function toggleBeauty() {
+  if (document.getElementById("beautyToggle").checked) {
+    ctx.filter = "blur(1.4px) brightness(1.06)";
+  } else {
+    ctx.filter = "none";
+  }
+}
+
+/* Upload frame PNG */
+function uploadFrame(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const img = new Image();
+  img.onload = () => {
+    ctx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+    ctx.drawImage(img, 0, 0, overlayCanvas.width, overlayCanvas.height);
+  };
+  img.src = URL.createObjectURL(file);
+}
+
+/* Ambil foto */
+function takePhoto() {
+  const canvas = document.createElement("canvas");
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+
+  const c = canvas.getContext("2d");
+
+  c.drawImage(video, 0, 0, canvas.width, canvas.height);
+  c.drawImage(overlayCanvas, 0, 0, canvas.width, canvas.height);
+
+  const link = document.createElement("a");
+  link.download = "faastore_photobooth.png";
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
+</script>
+
 </body>
 </html>
