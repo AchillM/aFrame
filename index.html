@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Photobooth — FaaStore (Pink Glam Sparkle)</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <h1>📸 Photobooth — FaaStore</h1>
+      <p class="tag">Pink Glam Sparkle • Pilih frame & custom upload</p>
+    </header>
+
+    <section class="camera-area">
+      <div class="video-wrap">
+        <video id="video" autoplay playsinline></video>
+        <canvas id="canvas" class="hidden"></canvas>
+        <img id="previewFrame" class="overlay hidden" alt="frame preview" />
+      </div>
+
+      <div class="controls">
+        <button id="snapBtn" class="btn primary">Ambil Foto</button>
+        <button id="switchBtn" class="btn">Ganti Kamera</button>
+        <label class="btn upload">
+          Upload Frame PNG
+          <input id="uploadFrame" type="file" accept="image/png" />
+        </label>
+        <label class="toggle">
+          <input type="checkbox" id="qrToggle" />
+          <span>QR Download</span>
+        </label>
+        <label class="toggle">
+          <input type="checkbox" id="beautyToggle" checked />
+          <span>Soft-beauty</span>
+        </label>
+      </div>
+    </section>
+
+    <section class="frames">
+      <h2>Pilih Frame</h2>
+      <div id="frameList" class="frame-list"></div>
+    </section>
+
+    <section class="result hidden" id="resultSection">
+      <h2>Hasil</h2>
+      <img id="resultImg" alt="hasil foto" />
+      <a id="download" download="faastore_photo.png" class="btn download">Download Foto</a>
+      <a id="qrLink" class="btn" target="_blank" rel="noopener">Buka QR (opsional)</a>
+    </section>
+
+    <footer>
+      <small>Made with ❤️ for FaaStore — Pink Glam Sparkle</small>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
