@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Photobooth</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Web Photobooth</h1>
+
+    <div class="camera-container">
+      <video id="video" autoplay playsinline></video>
+      <canvas id="canvas"></canvas>
+      <div class="flash"></div>
+    </div>
+
+    <div class="controls">
+      <button id="capture">📸 Take Photo</button>
+      <button id="switchCamera">🔄 Switch Camera</button>
+      <button id="undo">↩️ Undo</button>
+      <button id="reset">🗑️ Reset</button>
+      <button id="download">💾 Download</button>
+    </div>
+
+    <div class="filters">
+      <label>Filter: </label>
+      <select id="filter">
+        <option value="none">None</option>
+        <option value="grayscale(100%)">Grayscale</option>
+        <option value="sepia(100%)">Sepia</option>
+        <option value="brightness(150%)">Brightness</option>
+        <option value="contrast(150%)">Contrast</option>
+        <option value="blur(3px)">Blur</option>
+      </select>
+    </div>
+
+    <div class="frames">
+      <label>Frame: </label>
+      <select id="frameSelect">
+        <option value="">None</option>
+        <option value="assets/frames/frame1.png">Frame 1</option>
+        <option value="assets/frames/frame2.png">Frame 2</option>
+        <option value="assets/frames/frame3.png">Frame 3</option>
+      </select>
+      <input type="file" id="customFrame" accept="image/*">
+    </div>
+
+    <div class="stickers">
+      <label>Sticker: </label>
+      <select id="stickerSelect">
+        <option value="">None</option>
+        <option value="assets/stickers/sticker1.png">Sticker 1</option>
+        <option value="assets/stickers/sticker2.png">Sticker 2</option>
+        <option value="assets/stickers/sticker3.png">Sticker 3</option>
+      </select>
+      <input type="file" id="customSticker" accept="image/*">
+    </div>
+
+    <div class="dark-mode-toggle">
+      <label>Dark Mode: </label>
+      <input type="checkbox" id="darkMode">
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
