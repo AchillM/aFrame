@@ -91,43 +91,51 @@ video{
   border-radius:10px;
   border:none;
   cursor:pointer;
-  background:linear-gradient(90deg,var(--card), #2a0a2f);
-  color:var(--muted);
-  font-weight:600;
-  text-decoration:none;
+/* Container kamera */
+#camera-container {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
-.btn.primary{
-  background:linear-gradient(90deg,var(--accent), var(--accent-2));
-  color:#2a001a;
-  box-shadow: 0 6px 18px rgba(255,102,178,0.22);
+/* Video kamera */
+#camera {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  background: #000;
+  border-radius: 14px;
 }
 
-.upload input{display:none}
-
-.frames{margin-top:18px}
-.frame-list{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-top:10px;
+/* Canvas overlay untuk filter & frame */
+#overlayCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* penting */
+  border-radius: 14px;
 }
-.frame-item{
-  width:96px;
-  height:96px;
-  border-radius:12px;
-  overflow:hidden;
-  border:2px solid transparent;
-  cursor:pointer;
-  position:relative;
-  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+
+/* Pastikan container tidak collapse */
+#camera-container video,
+#camera-container canvas {
+  max-width: 100%;
+  height: auto;
 }
-.frame-item.selected{outline:3px solid rgba(255,102,178,0.25)}
 
-.frame-item img{width:100%;height:100%;object-fit:cover; display:block;}
-
-
-.result{margin-top:18px}
+/* Tombol */
+button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}18px}
 .result img{max-width:100%;border-radius:12px;border:3px solid rgba(255,102,178,0.08)}
 
 footer{margin-top:14px;text-align:center;color:rgba(255,255,255,0.5)}
